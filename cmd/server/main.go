@@ -30,6 +30,8 @@ func main() {
 		logger.Error("failed to initialize repository", slog.Any("error", err))
 		os.Exit(1)
 	}
+	defer repo.Close()
+
 	service := account.NewAccountApp(repo, &password.SHA256Encoder{})
 	server := server.NewAccountServer([]byte(secret), logger, service)
 
