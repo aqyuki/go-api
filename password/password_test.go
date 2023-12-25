@@ -3,7 +3,7 @@ package password
 import (
 	"testing"
 
-	"github.com/aqyuki/jwt-demo/account"
+	"github.com/aqyuki/go-api/account"
 	"github.com/stretchr/testify/assert"
 )
 

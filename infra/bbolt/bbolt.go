@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/aqyuki/jwt-demo/account"
-	"github.com/aqyuki/jwt-demo/logging"
+	"github.com/aqyuki/go-api/account"
+	"github.com/aqyuki/go-api/logging"
 	bolt "go.etcd.io/bbolt"
 )
 

@@ -1,4 +1,4 @@
-module github.com/aqyuki/jwt-demo
+module github.com/aqyuki/go-api
 
 go 1.21.5
 

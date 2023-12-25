@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/aqyuki/jwt-demo/account"
+	"github.com/aqyuki/go-api/account"
 )
 
 type SHA256Encoder struct{}

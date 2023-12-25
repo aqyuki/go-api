@@ -7,11 +7,11 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/aqyuki/jwt-demo/account"
-	"github.com/aqyuki/jwt-demo/infra/bbolt"
-	"github.com/aqyuki/jwt-demo/logging"
-	"github.com/aqyuki/jwt-demo/password"
-	"github.com/aqyuki/jwt-demo/server"
+	"github.com/aqyuki/go-api/account"
+	"github.com/aqyuki/go-api/infra/bbolt"
+	"github.com/aqyuki/go-api/logging"
+	"github.com/aqyuki/go-api/password"
+	"github.com/aqyuki/go-api/server"
 )
 
 const (

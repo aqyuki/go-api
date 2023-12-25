@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/aqyuki/jwt-demo/account"
-	"github.com/aqyuki/jwt-demo/logging"
+	"github.com/aqyuki/go-api/account"
+	"github.com/aqyuki/go-api/logging"
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
