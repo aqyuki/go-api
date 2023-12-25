@@ -42,7 +42,9 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 		})
 	}
 
-	x.logger.Info("Sign in request", slog.Any("request", reqBody))
+	x.logger.Info("Sign in request",
+		slog.String("id", reqBody.ID),
+	)
 
 	ctx := logging.ContextWithLogger(context.Background(), x.logger)
 	// account verification
@@ -81,7 +83,11 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 			Reason:  err.Error(),
 		})
 	}
-	x.logger.Info("Sign up request", slog.Any("request", reqBody))
+	x.logger.Info("Sign up request",
+		slog.String("id", reqBody.ID),
+		slog.String("name", reqBody.Name),
+		slog.String("bio", reqBody.Bio),
+	)
 
 	ctx := logging.ContextWithLogger(context.Background(), x.logger)
 	account, err := x.service.SignUp(ctx, reqBody.ID, reqBody.Password, reqBody.Name, reqBody.Bio)
