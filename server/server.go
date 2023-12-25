@@ -26,6 +26,7 @@ type AccountServer struct {
 	server *echo.Echo
 	secret []byte
 
+	logger  *slog.Logger
 	service account.Service
 }
 
@@ -38,6 +39,8 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 			Reason:  err.Error(),
 		})
 	}
+
+	x.logger.Info("Sign in request", slog.Any("request", reqBody))
 
 	ctx := c.Request().Context()
 
@@ -74,6 +77,7 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 			Reason:  err.Error(),
 		})
 	}
+	x.logger.Info("Sign up request", slog.Any("request", reqBody))
 
 	ctx := c.Request().Context()
 	account, err := x.service.SignUp(ctx, reqBody.ID, reqBody.Password, reqBody.Name, reqBody.Bio)
@@ -165,7 +169,7 @@ func NewAccountServer(key []byte, l *slog.Logger, s account.Service) *AccountSer
 
 	// set group
 	apiGroup := e.Group("/api/v1")
-	userGroup := apiGroup.Group("users")
+	userGroup := apiGroup.Group("/users")
 
 	// set common middleware
 	e.Use(middleware.Recover())
@@ -188,6 +192,7 @@ func NewAccountServer(key []byte, l *slog.Logger, s account.Service) *AccountSer
 
 	server.server = e
 	server.secret = key
+	server.logger = l
 	server.service = s
 	return server
 }
