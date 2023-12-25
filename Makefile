@@ -1,5 +1,5 @@
 # start server
-start:
+server:
 	@go run cmd/server/main.go
 
 # run test
