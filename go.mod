@@ -8,6 +8,7 @@ require (
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/m-mizutani/clog v0.0.4
 	github.com/stretchr/testify v1.8.4
+	go.etcd.io/bbolt v1.3.8
 )
 
 require (
