@@ -9,9 +9,9 @@ import (
 
 	"github.com/aqyuki/jwt-demo/account"
 	"github.com/aqyuki/jwt-demo/infra/bbolt"
+	"github.com/aqyuki/jwt-demo/logging"
 	"github.com/aqyuki/jwt-demo/password"
 	"github.com/aqyuki/jwt-demo/server"
-	"github.com/m-mizutani/clog"
 )
 
 const (
@@ -21,14 +21,7 @@ const (
 func main() {
 
 	// initialize required modules
-	logger := slog.New(
-		clog.New(
-			clog.WithColor(true),
-			clog.WithLevel(slog.LevelInfo),
-			clog.WithPrinter(clog.LinearPrinter),
-			clog.WithTimeFmt(time.DateTime),
-		))
-
+	logger := logging.NewLogger()
 	logger.Info("Starting server...")
 
 	// initialize server
@@ -49,6 +42,7 @@ func main() {
 		cancelCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
 		server.Shutdown(cancelCtx)
+		logger.Info("Server shutdown")
 	}()
 	server.Start(":8080")
 }
