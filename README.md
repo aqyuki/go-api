@@ -31,7 +31,6 @@ curl -X POST -H "Content-Type: application/json" -d '{"user_id":"foo","password"
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"user_id":"foo","password":"bar"}' http://localhost:8080/api/v1/signin
-
 ```
 
 以下のフォーマットに沿ったデータをリクエストボディーに付与して送信するとログインされる。
