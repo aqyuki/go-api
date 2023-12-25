@@ -40,7 +40,7 @@ func main() {
 
 	go func() {
 		<-ctx.Done()
-		logger.Info("Shutting down server...")
+		logger.Info("Shutting down server...", slog.String("reason", ctx.Err().Error()))
 		cancelCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
 		server.Shutdown(cancelCtx)
