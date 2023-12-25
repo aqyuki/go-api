@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"time"
@@ -130,6 +131,14 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 		Name: account.Name,
 		Bio:  account.Bio,
 	})
+}
+
+func (x *AccountServer) Start(addr string) error {
+	return x.server.Start(addr)
+}
+
+func (x *AccountServer) Shutdown(ctx context.Context) error {
+	return x.server.Shutdown(ctx)
 }
 
 func (x *AccountServer) generateJWT(id string) (string, error) {
