@@ -3,8 +3,10 @@ package bbolt
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"github.com/aqyuki/jwt-demo/account"
+	"github.com/aqyuki/jwt-demo/logging"
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -21,7 +23,7 @@ type BBoltAccountRepository struct {
 func (r *BBoltAccountRepository) FetchAccountWithPassword(ctx context.Context, id string, passwordHash account.HashedPassword) (*account.Account, error) {
 	var got *account.Account
 
-	r.db.View(func(tx *bolt.Tx) error {
+	err := r.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(accountBucketName))
 		if b == nil {
 			return fmt.Errorf("bucket %s does not exist", accountBucketName)
@@ -43,13 +45,19 @@ func (r *BBoltAccountRepository) FetchAccountWithPassword(ctx context.Context, i
 		got = a
 		return nil
 	})
+
+	logger := logging.LoggerFromContext(ctx)
+	if err != nil {
+		logger.Error("failed to fetch account", slog.Any("error", err))
+		return nil, fmt.Errorf("failed to fetch account: %w", err)
+	}
 	return got, nil
 }
 
 func (r *BBoltAccountRepository) FetchAccount(ctx context.Context, id string) (*account.Account, error) {
 	var got *account.Account
 
-	r.db.View(func(tx *bolt.Tx) error {
+	err := r.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(accountBucketName))
 		if b == nil {
 			return fmt.Errorf("bucket %s does not exist", accountBucketName)
@@ -67,11 +75,18 @@ func (r *BBoltAccountRepository) FetchAccount(ctx context.Context, id string) (*
 		got = a
 		return nil
 	})
+
+	logger := logging.LoggerFromContext(ctx)
+	if err != nil {
+		logger.Error("failed to fetch account", slog.Any("error", err))
+		return nil, fmt.Errorf("failed to fetch account: %w", err)
+	}
 	return got, nil
 }
 
 func (r *BBoltAccountRepository) CreateAccount(ctx context.Context, ac *account.Account) error {
-	return r.db.Update(func(tx *bolt.Tx) error {
+
+	err := r.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(accountBucketName))
 		if b == nil {
 			return fmt.Errorf("bucket %s does not exist", accountBucketName)
@@ -87,6 +102,12 @@ func (r *BBoltAccountRepository) CreateAccount(ctx context.Context, ac *account.
 		}
 		return nil
 	})
+	if err != nil {
+		logger := logging.LoggerFromContext(ctx)
+		logger.Error("failed to create account", slog.Any("error", err))
+		return fmt.Errorf("failed to create account: %w", err)
+	}
+	return nil
 }
 
 func (r *BBoltAccountRepository) Close() error {
