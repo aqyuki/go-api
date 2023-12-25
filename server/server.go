@@ -34,6 +34,7 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 	// try to convert request body to go structure (SignInRequest)
 	reqBody := new(SignInRequest)
 	if err := c.Bind(reqBody); err != nil {
+		x.logger.Info("Failed to extract request body", slog.Any("error", err))
 		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Message: "Failed to extract request body",
 			Reason:  err.Error(),
@@ -43,10 +44,10 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 	x.logger.Info("Sign in request", slog.Any("request", reqBody))
 
 	ctx := c.Request().Context()
-
 	// account verification
 	account, err := x.service.SignIn(ctx, reqBody.ID, reqBody.Password)
 	if err != nil {
+		x.logger.Info("Failed to fetch account", slog.Any("error", err))
 		return c.JSON(http.StatusOK, ErrorResponse{
 			Message: "Failed to fetch account",
 			Reason:  err.Error(),
@@ -55,6 +56,7 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 
 	token, err := x.generateJWT(account.ID)
 	if err != nil {
+		x.logger.Error("Failed to generate jwt token", slog.Any("error", err))
 		return c.JSON(
 			http.StatusInternalServerError,
 			ErrorResponse{
@@ -72,6 +74,7 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 	// try to convert request body to go structure (SignUpRequest)
 	reqBody := new(SignUpRequest)
 	if err := c.Bind(reqBody); err != nil {
+		x.logger.Info("Failed to extract request body", slog.Any("error", err))
 		return c.JSON(http.StatusBadRequest, ErrorResponse{
 			Message: "Failed to extract request body",
 			Reason:  err.Error(),
@@ -82,7 +85,8 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 	ctx := c.Request().Context()
 	account, err := x.service.SignUp(ctx, reqBody.ID, reqBody.Password, reqBody.Name, reqBody.Bio)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ErrorResponse{
+		x.logger.Info("Failed to register account", slog.Any("error", err))
+		return c.JSON(http.StatusOK, ErrorResponse{
 			Message: "Failed to register account",
 			Reason:  err.Error(),
 		})
@@ -90,6 +94,7 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 
 	token, err := x.generateJWT(account.ID)
 	if err != nil {
+		x.logger.Error("Failed to generate jwt token", slog.Any("error", err))
 		return c.JSON(http.StatusInternalServerError, ErrorResponse{
 			Message: "Failed to generate jwt token",
 			Reason:  err.Error(),
@@ -104,6 +109,7 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 	// try to get jwt token from context, and extract user id from it.
 	user, ok := c.Get(tokenContextKey).(*jwt.Token)
 	if !ok {
+		x.logger.Info("Failed to get jwt token from context")
 		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Message: "Failed to get jwt token from context",
 		})
@@ -115,6 +121,7 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 	urlID := c.Param("user_id")
 
 	if tokenID != urlID {
+		slog.Info("User id in token and url parameter are not matched", slog.String("tokenID", tokenID), slog.String("urlID", urlID))
 		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Message: "User id in token and url parameter are not matched",
 			Reason:  "",
@@ -124,7 +131,8 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 	ctx := c.Request().Context()
 	account, err := x.service.FetchAccountInfo(ctx, tokenID)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ErrorResponse{
+		x.logger.Info("Failed to fetch account", slog.Any("error", err))
+		return c.JSON(http.StatusOK, ErrorResponse{
 			Message: "Failed to fetch account",
 			Reason:  err.Error(),
 		})
