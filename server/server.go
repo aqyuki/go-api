@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/aqyuki/jwt-demo/account"
+	"github.com/aqyuki/jwt-demo/logging"
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -43,7 +44,7 @@ func (x *AccountServer) SignIn(c echo.Context) error {
 
 	x.logger.Info("Sign in request", slog.Any("request", reqBody))
 
-	ctx := c.Request().Context()
+	ctx := logging.ContextWithLogger(context.Background(), x.logger)
 	// account verification
 	account, err := x.service.SignIn(ctx, reqBody.ID, reqBody.Password)
 	if err != nil {
@@ -82,7 +83,7 @@ func (x *AccountServer) SignUp(c echo.Context) error {
 	}
 	x.logger.Info("Sign up request", slog.Any("request", reqBody))
 
-	ctx := c.Request().Context()
+	ctx := logging.ContextWithLogger(context.Background(), x.logger)
 	account, err := x.service.SignUp(ctx, reqBody.ID, reqBody.Password, reqBody.Name, reqBody.Bio)
 	if err != nil {
 		x.logger.Info("Failed to register account", slog.Any("error", err))
@@ -128,7 +129,7 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 		})
 	}
 
-	ctx := c.Request().Context()
+	ctx := logging.ContextWithLogger(c.Request().Context(), x.logger)
 	account, err := x.service.FetchAccountInfo(ctx, tokenID)
 	if err != nil {
 		x.logger.Info("Failed to fetch account", slog.Any("error", err))
