@@ -136,7 +136,7 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 	}
 
 	expires := claims.ExpiresAt.Time
-	if expires.Before(time.Now()) {
+	if expires.After(time.Now()) {
 		x.logger.Info("Token is expired", slog.String("tokenID", tokenID))
 		return c.JSON(http.StatusUnauthorized, ErrorResponse{
 			Message: "Token is expired",
