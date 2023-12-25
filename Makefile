@@ -1,4 +1,5 @@
 # start server
+.PHONY: server test cover
 server:
 	@go run cmd/server/main.go
 
