@@ -135,8 +135,17 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 		})
 	}
 
+	expires := claims.ExpiresAt.Time
+	if expires.Before(time.Now()) {
+		x.logger.Info("Token is expired", slog.String("tokenID", tokenID))
+		return c.JSON(http.StatusUnauthorized, ErrorResponse{
+			Message: "Token is expired",
+			Reason:  "",
+		})
+	}
+
 	ctx := logging.ContextWithLogger(c.Request().Context(), x.logger)
-	account, err := x.service.FetchAccountInfo(ctx, tokenID)
+	account, err := x.service.FetchAccountInfo(ctx, tokenID) //FIXME: change to use urlID
 	if err != nil {
 		x.logger.Info("Failed to fetch account", slog.Any("error", err))
 		return c.JSON(http.StatusOK, ErrorResponse{
