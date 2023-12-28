@@ -145,7 +145,7 @@ func (x *AccountServer) GetAccountInfo(c echo.Context) error {
 	}
 
 	ctx := logging.ContextWithLogger(c.Request().Context(), x.logger)
-	account, err := x.service.FetchAccountInfo(ctx, tokenID) //FIXME: change to use urlID
+	account, err := x.service.FetchAccountInfo(ctx, urlID)
 	if err != nil {
 		x.logger.Info("Failed to fetch account", slog.Any("error", err))
 		return c.JSON(http.StatusOK, ErrorResponse{
