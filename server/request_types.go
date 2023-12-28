@@ -1,12 +1,5 @@
 package server
 
-type Account struct {
-	ID           string
-	PasswordHash PasswordHash
-	Name         string
-	Bio          string
-}
-
 // ErrorResponse is a response for error
 type ErrorResponse struct {
 	Message string `json:"message"`
