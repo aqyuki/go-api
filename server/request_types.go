@@ -1,19 +1,15 @@
 package server
 
-// ErrorResponse is a response for error
-type ErrorResponse struct {
-	Message string `json:"message"`
-	Reason  string `json:"reason"`
+// SignInRequest is a request for sign-in
+type SignInRequest struct {
+	ID       string `json:"user_id"`
+	Password string `json:"password"`
 }
 
-// AccountInfoResponse is a response for account info
-type AccountInfoResponse struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Bio  string `json:"bio"`
-}
-
-// AccountVerifyResponse is a response for sign-in and sign-up
-type AccountVerifyResponse struct {
-	Token string `json:"token"` // Token is a jwt token.
+// SignUpRequest is a request for sign-up
+type SignUpRequest struct {
+	ID       string `json:"user_id"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+	Bio      string `json:"bio"`
 }
