@@ -7,7 +7,8 @@ require (
 	github.com/labstack/echo-jwt/v4 v4.2.0
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/m-mizutani/clog v0.0.4
-	github.com/stretchr/testify v1.8.4
+	github.com/manifoldco/promptui v0.9.0
+	github.com/stretchr/testify v1.9.0
 	go.etcd.io/bbolt v1.3.8
 )
 
@@ -20,7 +21,6 @@ require (
 	github.com/k0kubun/pp/v3 v3.2.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/m-mizutani/goerr v0.1.8 // indirect
-	github.com/manifoldco/promptui v0.9.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
