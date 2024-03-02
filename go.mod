@@ -9,7 +9,7 @@ require (
 	github.com/m-mizutani/clog v0.0.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/stretchr/testify v1.9.0
-	go.etcd.io/bbolt v1.3.8
+	go.etcd.io/bbolt v1.3.9
 )
 
 require (
